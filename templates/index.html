@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Price Prediction</title>
+</head>
+<body>
+    <h1>House Price Prediction</h1>
+
+    <!-- Display Metrics Table -->
+    <h2>Model Metrics (Loaded from JSON)</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Model</th>
+            <th>RMSE</th>
+            <th>MAE</th>
+            <th>R²</th>
+        </tr>
+        {% for model_name, metrics in evaluation_results.items() %}
+        <tr>
+            <td>{{ model_name }}</td>
+            <td>{{ metrics.RMSE }}</td>
+            <td>{{ metrics.MAE }}</td>
+            <td>{{ metrics.R2 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+
+    <h2>Predict a House Price</h2>
+    <form method="POST" action="/">
+        <!-- Choose Model -->
+        <label for="model_name">Select Model:</label>
+        <select name="model_name" id="model_name">
+            {% for name in model_names %}
+                {% if selected_model == name %}
+                <option value="{{ name }}" selected>{{ name }}</option>
+                {% else %}
+                <option value="{{ name }}">{{ name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <!-- 8 features corresponding to the California Housing dataset columns -->
+        <label for="MedInc">MedInc (Median Income):</label>
+        <input type="number" step="any" name="MedInc" id="MedInc"><br><br>
+
+        <label for="HouseAge">HouseAge:</label>
+        <input type="number" step="any" name="HouseAge" id="HouseAge"><br><br>
+
+        <label for="AveRooms">AveRooms (Average Rooms):</label>
+        <input type="number" step="any" name="AveRooms" id="AveRooms"><br><br>
+
+        <label for="AveBedrms">AveBedrms (Average Bedrooms):</label>
+        <input type="number" step="any" name="AveBedrms" id="AveBedrms"><br><br>
+
+        <label for="Population">Population:</label>
+        <input type="number" step="any" name="Population" id="Population"><br><br>
+
+        <label for="AveOccup">AveOccup (Average Occupancy):</label>
+        <input type="number" step="any" name="AveOccup" id="AveOccup"><br><br>
+
+        <label for="Latitude">Latitude:</label>
+        <input type="number" step="any" name="Latitude" id="Latitude"><br><br>
+
+        <label for="Longitude">Longitude:</label>
+        <input type="number" step="any" name="Longitude" id="Longitude"><br><br>
+
+        <input type="submit" value="Predict">
+    </form>
+
+    {% if prediction %}
+        <h3>Prediction Result:</h3>
+        <p><strong>Predicted MedHouseVal:</strong> {{ prediction }}</p>
+    {% endif %}
+</body>
+</html>
